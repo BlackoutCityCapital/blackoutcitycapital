@@ -708,6 +708,137 @@ section {
   text-align: right;
 }
 
+/* ========== BENCHMARK CHART ========== */
+.benchmark-section {
+  background: var(--bg-section-alt);
+  border-top: 1px solid var(--gray-dark);
+}
+.benchmark-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.year-tabs {
+  display: flex;
+  gap: 4px;
+}
+.year-tab {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  padding: 8px 20px;
+  border: 1px solid var(--gray-dark);
+  background: transparent;
+  color: var(--gray);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  outline: none;
+}
+.year-tab:first-child { border-radius: 4px 0 0 4px; }
+.year-tab:last-child { border-radius: 0 4px 4px 0; }
+.year-tab:hover {
+  color: var(--white);
+  border-color: var(--gray-dim);
+  background: rgba(255,255,255,0.03);
+}
+.year-tab.active {
+  color: var(--teal-bright);
+  border-color: var(--teal);
+  background: var(--teal-glow);
+}
+.benchmark-chart-container {
+  position: relative;
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--gray-dark);
+  border-radius: 4px;
+  padding: 32px 24px 24px 24px;
+  margin-top: 48px;
+}
+.benchmark-chart-container::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--teal-dim), transparent);
+}
+.benchmark-glow-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  border-radius: 4px;
+  box-shadow: inset 0 0 0px 0px transparent;
+  transition: box-shadow 0.4s ease;
+}
+.benchmark-glow-overlay.flash {
+  box-shadow: inset 0 0 80px rgba(58, 175, 175, 0.1);
+}
+.benchmark-chart-wrapper {
+  position: relative;
+  width: 100%;
+  height: 420px;
+}
+.benchmark-ytd-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--gray-dark);
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.benchmark-ytd-bar.visible { opacity: 1; }
+.benchmark-ytd-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--gray);
+}
+.benchmark-ytd-item .line-sample {
+  width: 24px;
+  height: 3px;
+  border-radius: 2px;
+  flex-shrink: 0;
+  position: relative;
+}
+.benchmark-ytd-item .dot-sample {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  position: absolute;
+  right: -1px; top: 50%;
+  transform: translateY(-50%);
+}
+.benchmark-ytd-item .line-sample.dragonfly { background: var(--teal-bright); box-shadow: 0 0 8px rgba(58, 175, 175, 0.5); }
+.benchmark-ytd-item .line-sample.dragonfly .dot-sample { background: var(--teal-bright); }
+.benchmark-ytd-item .line-sample.spy { background: #CC4444; }
+.benchmark-ytd-item .line-sample.nasdaq { background: #CC4444; opacity: 0.75; }
+.benchmark-ytd-item .line-sample.dow { background: #CC4444; opacity: 0.55; }
+.benchmark-ytd-item .line-sample.russell { background: #888888; }
+.benchmark-ytd-item .line-sample.qqq { background: #CC4444; opacity: 0.9; }
+.benchmark-ytd-item .ytd-val { color: var(--white); font-weight: 600; }
+.benchmark-ytd-item .ytd-val.teal { color: var(--teal-bright); }
+.benchmark-chart-note {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--gray-dim);
+  text-align: center;
+  margin-top: 12px;
+  letter-spacing: 0.5px;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.benchmark-chart-note.visible { opacity: 1; }
+
 /* ========== TRADING ACTIVITY ========== */
 .activity-section {
   background: var(--bg-section-alt);
@@ -1083,31 +1214,22 @@ footer {
   margin-bottom: 36px;
 }
 .footer-tagline {
-  font-size: 20px;
-  font-weight: 400;
-  font-style: italic;
+  font-size: clamp(14px, 2.5vw, 18px);
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
   color: #D4A846;
-  margin-bottom: 36px;
-  letter-spacing: 2px;
-  text-shadow: 0 0 25px rgba(212, 168, 70, 0.25);
+  margin-bottom: 8px;
+  text-shadow: none;
+  opacity: 0;
 }
-.footer-tagline span {
-  position: relative;
-  display: inline-block;
-}
-.footer-tagline span::after {
-  content: '';
-  position: absolute;
-  bottom: -8px;
-  left: 0;
-  width: 0;
-  height: 1px;
-  background: linear-gradient(90deg, #D4A846, #F0D078, #D4A846);
-  box-shadow: 0 0 10px rgba(212, 168, 70, 0.3);
-  transition: width 2.5s ease-out;
-}
-.footer-tagline.gold-animate span::after {
+.footer-tagline-line {
   width: 100%;
+  max-width: 700px;
+  height: 6px;
+  margin: 0 auto 36px;
+  display: block;
+  opacity: 0;
 }
 footer {
   text-align: center;
@@ -1167,6 +1289,13 @@ footer {
   .year-bar { grid-template-columns: 60px 1fr 60px; }
   .benchmark-row { grid-template-columns: 60px 1fr 60px; }
   .founder-content { grid-template-columns: 1fr; }
+  .benchmark-header { flex-direction: column; align-items: flex-start; }
+  .benchmark-chart-wrapper { height: 300px; }
+  .benchmark-chart-container { padding: 20px 12px 16px 12px; }
+  .benchmark-ytd-bar { gap: 16px; }
+  .benchmark-ytd-item { font-size: 10px; gap: 6px; }
+  .benchmark-ytd-item .line-sample { width: 18px; }
+  .year-tab { padding: 6px 14px; font-size: 12px; }
   .hero-city { height: 250px; } .hero-logo { width: 375px !important; }
 }
 </style>
@@ -1187,6 +1316,7 @@ footer {
   <ul class="nav-links" id="navLinks">
     <li><a href="#strategy">Strategy</a></li>
     <li><a href="#performance">Performance</a></li>
+    <li><a href="#benchmark">Benchmark</a></li>
     <li><a href="#activity">Activity</a></li>
     <li><a href="#markets">Markets</a></li>
     <li><a href="#edge">Edge</a></li>
@@ -1587,6 +1717,30 @@ footer {
   </div>
 </section>
 
+<!-- BENCHMARK CHART -->
+<section id="benchmark" class="benchmark-section">
+  <div class="section-inner">
+    <div class="section-label reveal">Benchmark</div>
+    <div class="benchmark-header reveal">
+      <h2 class="section-title">Consistency Over <strong>Time.</strong></h2>
+      <div class="year-tabs">
+        <button class="year-tab active" data-year="2025">2025</button>
+        <button class="year-tab" data-year="2024">2024</button>
+        <button class="year-tab" data-year="2023">2023</button>
+      </div>
+    </div>
+    <p class="section-text reveal" id="benchmarkSubtitle">Upgraded algo. More instruments. Tighter risk. Twelve months. Zero negative.</p>
+    <div class="benchmark-chart-container reveal">
+      <div class="benchmark-glow-overlay" id="benchmarkGlowOverlay"></div>
+      <div class="benchmark-chart-wrapper">
+        <canvas id="cumulativeChart"></canvas>
+      </div>
+      <div class="benchmark-ytd-bar" id="benchmarkYtdBar"></div>
+      <div class="benchmark-chart-note" id="benchmarkChartNote"></div>
+    </div>
+  </div>
+</section>
+
 <!-- TRADING ACTIVITY -->
 <section id="activity" class="activity-section">
   <div class="section-inner">
@@ -1770,11 +1924,35 @@ footer {
     <rect x="1380" y="18" width="16" height="32"/>
     <rect x="1402" y="10" width="10" height="40"/>
   </svg>
-  <p class="footer-tagline" id="goldDust"><span>There is gold dust in the air.</span></p>
+  <p class="footer-tagline" id="goldDustText">There is gold dust in the air.</p>
+  <svg class="footer-tagline-line" id="goldDustLine" viewBox="0 0 1000 6" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#D4A846" stop-opacity="0" />
+        <stop offset="8%" stop-color="#D4A846" stop-opacity="0.4" />
+        <stop offset="30%" stop-color="#D4A846" stop-opacity="0.8" />
+        <stop offset="50%" stop-color="#F0D078" stop-opacity="1" />
+        <stop offset="70%" stop-color="#D4A846" stop-opacity="0.8" />
+        <stop offset="92%" stop-color="#D4A846" stop-opacity="0.4" />
+        <stop offset="100%" stop-color="#D4A846" stop-opacity="0" />
+      </linearGradient>
+      <linearGradient id="whiteGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0" />
+        <stop offset="8%" stop-color="#FFFFFF" stop-opacity="0.5" />
+        <stop offset="30%" stop-color="#FFFFFF" stop-opacity="0.8" />
+        <stop offset="50%" stop-color="#FFFFFF" stop-opacity="1" />
+        <stop offset="70%" stop-color="#FFFFFF" stop-opacity="0.8" />
+        <stop offset="92%" stop-color="#FFFFFF" stop-opacity="0.5" />
+        <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0" />
+      </linearGradient>
+    </defs>
+    <polygon id="goldLineShape" points="0,2.5 500,0.5 1000,2.5 1000,3.5 500,5.5 0,3.5" fill="url(#goldGrad)" />
+  </svg>
   <p class="footer-disclaimer">DISCLAIMER: The information contained herein is for informational purposes only and should not be construed as financial, legal, or tax advice. Trading and investing in financial instruments — including equities, indices, commodities, cryptocurrencies, and derivatives such as perpetual futures — involves significant risk of loss. Past performance is not indicative of future results. This website does not constitute an offer to sell or a solicitation of an offer to buy any securities or investment products.</p>
   <p class="footer-copyright">&copy; 2026 Blackout City Capital. All Rights Reserved.</p>
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
 // Floating data particles - MORE VISIBLE with color classes
 const particlesEl = document.getElementById('particles');
@@ -1919,16 +2097,49 @@ function animateTradeCount() {
 }
 
 // Gold dust line animation on scroll
-const goldEl = document.getElementById('goldDust');
-if (goldEl) {
-  const goldObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('gold-animate');
+// Gold dust animation — fade in, flash white, settle to gold
+var goldDustText = document.getElementById('goldDustText');
+var goldDustLine = document.getElementById('goldDustLine');
+var goldLineShape = document.getElementById('goldLineShape');
+var goldAnimated = false;
+
+function runGoldAnimation() {
+  // Phase 1: Fade in from black (1.5s)
+  goldDustText.style.transition = 'opacity 1.5s ease';
+  goldDustText.style.opacity = '1';
+  goldDustLine.style.transition = 'opacity 1.5s ease';
+  goldDustLine.style.opacity = '1';
+
+  // Phase 2: Flash white — text AND line (at 1.5s)
+  setTimeout(function() {
+    goldDustText.style.transition = 'color 0.3s ease, text-shadow 0.3s ease';
+    goldDustText.style.color = '#FFFFFF';
+    goldDustText.style.textShadow = '0 0 30px rgba(255,255,255,0.5), 0 0 60px rgba(212,168,70,0.3)';
+    goldLineShape.setAttribute('fill', 'url(#whiteGrad)');
+    goldDustLine.style.filter = 'drop-shadow(0 0 12px rgba(255,255,255,0.3))';
+  }, 1500);
+
+  // Phase 3: Settle back to gold (at 2.1s)
+  setTimeout(function() {
+    goldDustText.style.transition = 'color 1.4s ease, text-shadow 1.4s ease';
+    goldDustText.style.color = '#D4A846';
+    goldDustText.style.textShadow = '0 0 15px rgba(212,168,70,0.1)';
+    goldLineShape.setAttribute('fill', 'url(#goldGrad)');
+    goldDustLine.style.transition = 'filter 1.4s ease';
+    goldDustLine.style.filter = 'none';
+  }, 2100);
+}
+
+if (goldDustText) {
+  var goldObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting && !goldAnimated) {
+        goldAnimated = true;
+        runGoldAnimation();
       }
     });
   }, { threshold: 0.5 });
-  goldObserver.observe(goldEl);
+  goldObserver.observe(goldDustText);
 }
 
 // Nav
@@ -1941,6 +2152,458 @@ document.getElementById('navToggle').addEventListener('click', () => {
 document.querySelectorAll('.nav-links a').forEach(link => {
   link.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'));
 });
+
+// ══════════════════════════════════════════
+// BENCHMARK CUMULATIVE CHART
+// ══════════════════════════════════════════
+
+(function() {
+  // null = DragonFly not active that month
+  const benchmarkData = {
+    2025: {
+      DragonFly: [3.24, 1.34, 2.36, 2.20, 1.53, 0.66, 8.37, 2.33, 4.76, 6.39, 1.38, 0.15],
+      SPY:       [2.70, -1.40, -5.75, -0.77, 6.16, 4.98, 2.17, 1.91, 3.51, 2.28, 0.13, 0.13],
+      NASDAQ:    [2.23, -2.70, -7.73, 1.35, 9.10, 6.87, 2.39, 0.83, 5.41, 4.73, -1.66, -1.51],
+      DOW:       [4.69, -1.60, -4.21, -3.19, 3.99, 4.32, 0.08, 3.21, 1.88, 2.54, 0.33, 0.32],
+      Russell:   [2.52, -5.20, -7.06, -2.32, 5.23, 5.27, 1.68, 7.21, 2.85, 1.71, 1.02, 0.26],
+      QQQ:       [2.16, -2.69, -7.00, 1.42, 9.15, 6.33, 2.46, 0.96, 5.29, 4.77, -1.57, -0.45],
+      ytd: { DragonFly: 34.71, SPY: 16.05, NASDAQ: 19.31, DOW: 12.36, Russell: 13.17, QQQ: 20.83 },
+      subtitle: "Upgraded algo. More instruments. Tighter risk. Twelve months. Zero negative.",
+      note: null
+    },
+    2024: {
+      DragonFly: [3.19, 16.02, 22.61, 3.79, 3.33, null, null, null, null, null, 38.27, 12.52],
+      SPY:       [1.59, 4.80, 3.10, -4.13, 4.78, 3.49, 1.15, 2.24, 2.04, -0.98, 5.70, -2.49],
+      NASDAQ:    [1.87, 5.34, 1.19, -4.45, 6.64, 6.21, -1.69, 1.11, 2.49, -0.82, 5.14, 0.40],
+      DOW:       [1.18, 2.23, 2.08, -4.90, 2.26, 1.12, 4.50, 1.57, 1.98, -1.35, 7.52, -5.28],
+      Russell:   [-3.97, 5.70, 3.24, -6.89, 5.12, -2.30, 10.37, -1.69, 0.35, -1.37, 10.90, -8.64],
+      QQQ:       [1.83, 5.34, 1.14, -4.23, 6.18, 6.64, -1.97, 1.08, 2.56, -0.85, 5.20, 0.30],
+      ytd: { DragonFly: 100.13, SPY: 21.29, NASDAQ: 23.43, DOW: 12.91, Russell: 10.82, QQQ: 23.22 },
+      subtitle: "DragonFly doubled. +100% in a year where the best index returned 23%. Five active months delivered what indices needed twelve to achieve.",
+      note: "DragonFly inactive Jun\u2013Oct 2024 \u2014 cumulative held flat during gap"
+    },
+    2023: {
+      DragonFly: [1.88, 2.46, 5.82, 6.69, 6.29, 19.98, 12.21, null, null, 15.72, 0.56, 36.82],
+      SPY:       [6.18, -2.21, 3.51, 1.74, 0.70, 6.00, 3.27, -1.79, -4.88, -2.20, 8.82, 4.15],
+      NASDAQ:    [10.70, -3.20, 10.54, 1.30, 7.81, 6.44, 3.81, -1.53, -5.07, -2.16, 10.31, 5.45],
+      DOW:       [2.83, -4.06, 1.89, 2.56, -3.54, 4.49, 3.46, -2.43, -3.92, -1.20, 8.67, 4.89],
+      Russell:   [9.59, -1.68, -4.95, -1.92, -1.19, 7.81, 6.36, -5.08, -6.20, -6.67, 9.28, 11.44],
+      QQQ:       [10.60, -2.61, 10.10, 1.46, 7.91, 6.01, 3.68, -1.52, -5.21, -2.21, 10.54, 5.18],
+      ytd: { DragonFly: 108.42, SPY: 24.29, NASDAQ: 53.70, DOW: 13.88, Russell: 15.11, QQQ: 53.79 },
+      subtitle: "The year that proved the system. +108% while compounding through every market condition. December alone: +36.82%.",
+      note: "DragonFly inactive Aug\u2013Sep 2023 \u2014 cumulative held flat during gap"
+    }
+  };
+
+  const bmLabels = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  function bmBuildCumulative(monthly, officialYTD) {
+    var cum = [];
+    var running = 0;
+    for (var i = 0; i < monthly.length; i++) {
+      if (monthly[i] !== null) running += monthly[i];
+      cum.push(running);
+    }
+    var rawFinal = cum[cum.length - 1];
+    var scale = rawFinal !== 0 ? officialYTD / rawFinal : 1;
+    return cum.map(function(v) { return Math.round(v * scale * 100) / 100; });
+  }
+
+  // Animation state
+  var bmDrawProgress = 0;
+  var bmGlowPhase = 'none';
+  var bmGlowAlpha = 0;
+  var bmIndicesAlpha = 0;
+  var bmCurrentYear = '2025';
+  var bmAnimRunning = false;
+  var bmAnimFrameId = null;
+  var bmHasPlayed = false;
+
+  var BM_DRAW_DURATION = 3000;
+  var BM_FLASH_DURATION = 600;
+  var BM_SETTLE_DURATION = 1800;
+
+  // ── Plugins ──
+  var bmGlowPlugin = {
+    id: 'bmGlow',
+    afterDatasetDraw: function(chart, args) {
+      if (args.index !== 0) return;
+      if (bmGlowPhase === 'none' && bmDrawProgress < 1) return;
+      var meta = chart.getDatasetMeta(0);
+      var ctx = chart.ctx;
+      ctx.save();
+      var r = 58, g = 175, b = 175, shadowBlur = 12;
+      if (bmGlowPhase === 'flash') {
+        r = Math.round(58 + 197 * bmGlowAlpha);
+        g = Math.round(175 + 80 * bmGlowAlpha);
+        b = Math.round(175 + 80 * bmGlowAlpha);
+        shadowBlur = 12 + 28 * bmGlowAlpha;
+      } else if (bmGlowPhase === 'settle') {
+        shadowBlur = 40 * bmGlowAlpha + 12 * (1 - bmGlowAlpha);
+        r = Math.round(255 * bmGlowAlpha + 58 * (1 - bmGlowAlpha));
+        g = Math.round(255 * bmGlowAlpha + 175 * (1 - bmGlowAlpha));
+        b = Math.round(255 * bmGlowAlpha + 175 * (1 - bmGlowAlpha));
+      }
+      ctx.shadowColor = 'rgba(' + r + ',' + g + ',' + b + ',0.7)';
+      ctx.shadowBlur = shadowBlur;
+      ctx.strokeStyle = 'rgba(' + r + ',' + g + ',' + b + ',0.6)';
+      ctx.lineWidth = 3;
+      ctx.lineJoin = 'round';
+      var points = meta.data;
+      if (points.length < 2) { ctx.restore(); return; }
+      var total = points.length;
+      var visCount = Math.floor(bmDrawProgress * (total - 1)) + 1;
+      ctx.beginPath();
+      ctx.moveTo(points[0].x, points[0].y);
+      for (var i = 1; i < Math.min(visCount + 1, total); i++) {
+        if (i < visCount) {
+          ctx.lineTo(points[i].x, points[i].y);
+        } else {
+          var frac = (bmDrawProgress * (total - 1)) - Math.floor(bmDrawProgress * (total - 1));
+          ctx.lineTo(points[i-1].x + (points[i].x - points[i-1].x) * frac,
+                     points[i-1].y + (points[i].y - points[i-1].y) * frac);
+        }
+      }
+      ctx.stroke();
+      ctx.restore();
+    }
+  };
+
+  var bmClipPlugin = {
+    id: 'bmClip',
+    beforeDatasetDraw: function(chart, args) {
+      if (args.index === 0 && bmDrawProgress < 1) {
+        var ctx = chart.ctx;
+        var area = chart.chartArea;
+        var points = chart.getDatasetMeta(0).data;
+        var total = points.length;
+        var curIdx = bmDrawProgress * (total - 1);
+        var fl = Math.floor(curIdx);
+        var frac = curIdx - fl;
+        var clipX = fl < points.length - 1
+          ? points[fl].x + (points[fl+1].x - points[fl].x) * frac
+          : points[points.length - 1].x;
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(area.left - 2, area.top - 10, clipX - area.left + 6, area.bottom - area.top + 20);
+        ctx.clip();
+      }
+    },
+    afterDatasetDraw: function(chart, args) {
+      if (args.index === 0 && bmDrawProgress < 1) chart.ctx.restore();
+    }
+  };
+
+  var bmPointPlugin = {
+    id: 'bmPoint',
+    afterDatasetDraw: function(chart, args) {
+      if (args.index !== 0 || bmDrawProgress <= 0) return;
+      var meta = chart.getDatasetMeta(0);
+      var points = meta.data;
+      var ctx = chart.ctx;
+      var total = points.length;
+      var curIdx = bmDrawProgress * (total - 1);
+      for (var i = 0; i < total; i++) {
+        if (i > curIdx + 0.3) break;
+        var pt = points[i];
+        var since = (curIdx - i) / (total - 1);
+        var radius, alpha, glow;
+        if (Math.abs(curIdx - i) < 0.5) { radius = 5.5; alpha = 1; glow = 18; }
+        else if (since > 0 && since < 0.12) { var t = since / 0.12; radius = 5.5 - 2.5*t; alpha = 1 - 0.25*t; glow = 18 - 14*t; }
+        else if (since >= 0.12) { radius = 3; alpha = 0.8; glow = 0; }
+        else continue;
+        var dr = 58, dg = 175, db = 175, cr = 20, cg = 20, cb = 20;
+        if (bmGlowPhase === 'flash') {
+          dr = Math.round(58 + 197*bmGlowAlpha); dg = Math.round(175 + 80*bmGlowAlpha); db = Math.round(175 + 80*bmGlowAlpha);
+          cr = cg = cb = Math.round(20 + 180*bmGlowAlpha);
+        } else if (bmGlowPhase === 'settle') {
+          dr = Math.round(255*bmGlowAlpha + 58*(1-bmGlowAlpha)); dg = Math.round(255*bmGlowAlpha + 175*(1-bmGlowAlpha)); db = Math.round(255*bmGlowAlpha + 175*(1-bmGlowAlpha));
+        }
+        if (glow > 0) {
+          ctx.save();
+          ctx.shadowColor = 'rgba(' + dr + ',' + dg + ',' + db + ',0.6)';
+          ctx.shadowBlur = glow;
+          ctx.beginPath(); ctx.arc(pt.x, pt.y, radius, 0, Math.PI*2);
+          ctx.fillStyle = 'rgba(' + dr + ',' + dg + ',' + db + ',' + alpha + ')';
+          ctx.fill(); ctx.restore();
+        }
+        ctx.beginPath(); ctx.arc(pt.x, pt.y, radius, 0, Math.PI*2);
+        ctx.fillStyle = 'rgba(' + dr + ',' + dg + ',' + db + ',' + alpha + ')';
+        ctx.fill();
+        ctx.beginPath(); ctx.arc(pt.x, pt.y, Math.max(radius - 1.5, 0.5), 0, Math.PI*2);
+        ctx.fillStyle = 'rgba(' + cr + ',' + cg + ',' + cb + ',' + (alpha*0.7) + ')';
+        ctx.fill();
+      }
+    }
+  };
+
+  // ── Build datasets ──
+  function bmBuildDatasets(year) {
+    var d = benchmarkData[year];
+    return [
+      { label: 'DragonFly', data: bmBuildCumulative(d.DragonFly, d.ytd.DragonFly),
+        borderColor: '#3AAFAF', backgroundColor: 'rgba(58,175,175,0.06)', borderWidth: 3,
+        fill: true, tension: 0.25, pointRadius: 0, pointHoverRadius: 6,
+        pointHoverBackgroundColor: '#3AAFAF', pointHoverBorderColor: '#FFFFFF', pointHoverBorderWidth: 2, order: 0 },
+      { label: 'QQQ', data: bmBuildCumulative(d.QQQ, d.ytd.QQQ),
+        borderColor: 'rgba(204,68,68,0.85)', borderWidth: 1.5, borderDash: [6,3],
+        fill: false, tension: 0.25, pointRadius: 2.5, pointBackgroundColor: 'rgba(204,68,68,0.85)',
+        pointBorderColor: 'transparent', pointHoverRadius: 5, pointHoverBackgroundColor: '#CC4444', order: 1 },
+      { label: 'NASDAQ', data: bmBuildCumulative(d.NASDAQ, d.ytd.NASDAQ),
+        borderColor: 'rgba(204,68,68,0.65)', borderWidth: 1.5, borderDash: [8,4],
+        fill: false, tension: 0.25, pointRadius: 2.5, pointBackgroundColor: 'rgba(204,68,68,0.65)',
+        pointBorderColor: 'transparent', pointHoverRadius: 5, pointHoverBackgroundColor: '#CC4444', pointStyle: 'triangle', order: 2 },
+      { label: 'SPY', data: bmBuildCumulative(d.SPY, d.ytd.SPY),
+        borderColor: 'rgba(204,68,68,0.55)', borderWidth: 1.5,
+        fill: false, tension: 0.25, pointRadius: 2.5, pointBackgroundColor: 'rgba(204,68,68,0.55)',
+        pointBorderColor: 'transparent', pointHoverRadius: 5, pointHoverBackgroundColor: '#CC4444', pointStyle: 'rectRot', order: 3 },
+      { label: 'Russell', data: bmBuildCumulative(d.Russell, d.ytd.Russell),
+        borderColor: 'rgba(136,136,136,0.55)', borderWidth: 1.2, borderDash: [3,3],
+        fill: false, tension: 0.25, pointRadius: 2, pointBackgroundColor: 'rgba(136,136,136,0.55)',
+        pointBorderColor: 'transparent', pointHoverRadius: 4, pointHoverBackgroundColor: '#888888', pointStyle: 'triangle', rotation: 180, order: 4 },
+      { label: 'DOW', data: bmBuildCumulative(d.DOW, d.ytd.DOW),
+        borderColor: 'rgba(204,68,68,0.4)', borderWidth: 1.2, borderDash: [2,4],
+        fill: false, tension: 0.25, pointRadius: 2, pointBackgroundColor: 'rgba(204,68,68,0.4)',
+        pointBorderColor: 'transparent', pointHoverRadius: 4, pointHoverBackgroundColor: '#CC4444', pointStyle: 'diamond', order: 5 }
+    ];
+  }
+
+  // ── YTD bar ──
+  function bmBuildYtdBar(year) {
+    var ytd = benchmarkData[year].ytd;
+    var items = [
+      { key: 'DragonFly', cls: 'dragonfly', dot: true, teal: true },
+      { key: 'QQQ', cls: 'qqq' }, { key: 'NASDAQ', cls: 'nasdaq' },
+      { key: 'SPY', cls: 'spy' }, { key: 'Russell', cls: 'russell' }, { key: 'DOW', cls: 'dow' }
+    ];
+    items.sort(function(a, b) {
+      if (a.key === 'DragonFly') return -1;
+      if (b.key === 'DragonFly') return 1;
+      return ytd[b.key] - ytd[a.key];
+    });
+    var bar = document.getElementById('benchmarkYtdBar');
+    bar.innerHTML = items.map(function(item) {
+      return '<div class="benchmark-ytd-item">' +
+        '<span class="line-sample ' + (item.cls || '') + '">' + (item.dot ? '<span class="dot-sample"></span>' : '') + '</span>' +
+        item.key + ' <span class="ytd-val' + (item.teal ? ' teal' : '') + '">+' + ytd[item.key].toFixed(2) + '%</span></div>';
+    }).join('');
+  }
+
+  // ── Create chart ──
+  var bmCtx = document.getElementById('cumulativeChart').getContext('2d');
+  var bmInitialDatasets = bmBuildDatasets('2025');
+
+  for (var i = 1; i < bmInitialDatasets.length; i++) {
+    bmInitialDatasets[i]._targetBorderColor = bmInitialDatasets[i].borderColor;
+    bmInitialDatasets[i]._targetPointBg = bmInitialDatasets[i].pointBackgroundColor;
+    bmInitialDatasets[i].borderColor = 'transparent';
+    bmInitialDatasets[i].pointBackgroundColor = 'transparent';
+    bmInitialDatasets[i].pointBorderColor = 'transparent';
+  }
+
+  var bmChart = new Chart(bmCtx, {
+    type: 'line',
+    data: { labels: bmLabels, datasets: bmInitialDatasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 0 },
+      layout: { padding: { top: 8, right: 12, bottom: 0, left: 4 } },
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(14,14,14,0.95)',
+          borderColor: '#333333', borderWidth: 1,
+          titleFont: { family: "'JetBrains Mono', monospace", size: 12, weight: '500' },
+          bodyFont: { family: "'JetBrains Mono', monospace", size: 11, weight: '400' },
+          titleColor: '#F2F2F2', bodyColor: '#999999',
+          padding: 12, cornerRadius: 4,
+          displayColors: true, boxWidth: 12, boxHeight: 2, boxPadding: 6,
+          callbacks: {
+            label: function(c) {
+              var val = c.parsed.y;
+              return ' ' + c.dataset.label + '  ' + (val >= 0 ? '+' : '') + val.toFixed(2) + '%';
+            },
+            labelTextColor: function(c) {
+              if (c.datasetIndex === 0) return '#3AAFAF';
+              if (c.dataset.label === 'Russell') return '#888888';
+              return '#CC4444';
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(68,68,68,0.25)', lineWidth: 0.5 },
+          ticks: { font: { family: "'JetBrains Mono', monospace", size: 11, weight: '400' }, color: '#555555', padding: 8 },
+          border: { color: '#2A2A2A' }
+        },
+        y: {
+          position: 'right',
+          grid: {
+            color: function(c) { return c.tick.value === 0 ? 'rgba(255,255,255,0.08)' : 'rgba(68,68,68,0.15)'; },
+            lineWidth: function(c) { return c.tick.value === 0 ? 1 : 0.5; }
+          },
+          ticks: {
+            font: { family: "'JetBrains Mono', monospace", size: 11, weight: '400' }, color: '#555555', padding: 12,
+            callback: function(v) { return (v >= 0 ? '+' : '') + v + '%'; }
+          },
+          border: { display: false }
+        }
+      }
+    },
+    plugins: [bmClipPlugin, bmGlowPlugin, bmPointPlugin]
+  });
+
+  bmBuildYtdBar('2025');
+
+  // ── Animation ──
+  function bmResetAnim() {
+    if (bmAnimFrameId) cancelAnimationFrame(bmAnimFrameId);
+    bmDrawProgress = 0; bmGlowPhase = 'none'; bmGlowAlpha = 0; bmIndicesAlpha = 0;
+    bmAnimRunning = false;
+    document.getElementById('benchmarkGlowOverlay').classList.remove('flash');
+    document.getElementById('benchmarkYtdBar').classList.remove('visible');
+    document.getElementById('benchmarkChartNote').classList.remove('visible');
+  }
+
+  function bmFadeIndicesTo(alpha) {
+    for (var i = 1; i < bmChart.data.datasets.length; i++) {
+      var ds = bmChart.data.datasets[i];
+      var target = ds._targetBorderColor;
+      var targetPt = ds._targetPointBg;
+      if (typeof target === 'string' && target.indexOf('rgba') === 0) {
+        var m = target.match(/rgba\(([\d.]+),\s*([\d.]+),\s*([\d.]+),\s*([\d.]+)\)/);
+        if (m) ds.borderColor = 'rgba(' + m[1] + ',' + m[2] + ',' + m[3] + ',' + (parseFloat(m[4]) * alpha).toFixed(3) + ')';
+      }
+      if (typeof targetPt === 'string' && targetPt.indexOf('rgba') === 0) {
+        var m2 = targetPt.match(/rgba\(([\d.]+),\s*([\d.]+),\s*([\d.]+),\s*([\d.]+)\)/);
+        if (m2) ds.pointBackgroundColor = 'rgba(' + m2[1] + ',' + m2[2] + ',' + m2[3] + ',' + (parseFloat(m2[4]) * alpha).toFixed(3) + ')';
+      }
+    }
+  }
+
+  function bmRunAnimation() {
+    bmAnimRunning = true;
+    var startTime = performance.now();
+    function tick(now) {
+      var elapsed = now - startTime;
+
+      // Phase 1: Draw
+      if (elapsed < BM_DRAW_DURATION) {
+        var t = elapsed / BM_DRAW_DURATION;
+        bmDrawProgress = 1 - Math.pow(1 - t, 3);
+        bmChart.update('none');
+        bmAnimFrameId = requestAnimationFrame(tick);
+        return;
+      }
+
+      // Phase 2: Flash white
+      var flashStart = BM_DRAW_DURATION;
+      if (elapsed < flashStart + BM_FLASH_DURATION) {
+        bmDrawProgress = 1;
+        bmGlowPhase = 'flash';
+        var t2 = (elapsed - flashStart) / BM_FLASH_DURATION;
+        bmGlowAlpha = Math.min(t2 * 2, 1);
+        var r = Math.round(58 + 197 * bmGlowAlpha);
+        var g = Math.round(175 + 80 * bmGlowAlpha);
+        var b = Math.round(175 + 80 * bmGlowAlpha);
+        bmChart.data.datasets[0].borderColor = 'rgb(' + r + ',' + g + ',' + b + ')';
+        document.getElementById('benchmarkGlowOverlay').classList.add('flash');
+        bmChart.update('none');
+        bmAnimFrameId = requestAnimationFrame(tick);
+        return;
+      }
+
+      // Phase 3: Settle + fade in indices
+      var settleStart = flashStart + BM_FLASH_DURATION;
+      if (elapsed < settleStart + BM_SETTLE_DURATION) {
+        bmGlowPhase = 'settle';
+        var t3 = (elapsed - settleStart) / BM_SETTLE_DURATION;
+        bmGlowAlpha = 1 - (1 - Math.pow(1 - t3, 2));
+        var r2 = Math.round(255 * bmGlowAlpha + 58 * (1 - bmGlowAlpha));
+        var g2 = Math.round(255 * bmGlowAlpha + 175 * (1 - bmGlowAlpha));
+        var b2 = Math.round(255 * bmGlowAlpha + 175 * (1 - bmGlowAlpha));
+        bmChart.data.datasets[0].borderColor = 'rgb(' + r2 + ',' + g2 + ',' + b2 + ')';
+        if (t3 > 0.3) {
+          bmIndicesAlpha = Math.min((t3 - 0.3) / 0.7, 1);
+          bmFadeIndicesTo(bmIndicesAlpha);
+        }
+        if (t3 > 0.4) document.getElementById('benchmarkGlowOverlay').classList.remove('flash');
+        if (bmIndicesAlpha > 0.5) {
+          document.getElementById('benchmarkYtdBar').classList.add('visible');
+          var note = benchmarkData[bmCurrentYear].note;
+          if (note) {
+            document.getElementById('benchmarkChartNote').textContent = note;
+            document.getElementById('benchmarkChartNote').classList.add('visible');
+          }
+        }
+        bmChart.update('none');
+        bmAnimFrameId = requestAnimationFrame(tick);
+        return;
+      }
+
+      // Phase 4: Final
+      bmGlowPhase = 'done'; bmGlowAlpha = 0;
+      bmChart.data.datasets[0].borderColor = '#3AAFAF';
+      bmFadeIndicesTo(1);
+      document.getElementById('benchmarkGlowOverlay').classList.remove('flash');
+      document.getElementById('benchmarkYtdBar').classList.add('visible');
+      var noteF = benchmarkData[bmCurrentYear].note;
+      if (noteF) {
+        document.getElementById('benchmarkChartNote').textContent = noteF;
+        document.getElementById('benchmarkChartNote').classList.add('visible');
+      }
+      bmChart.update('none');
+      bmAnimRunning = false;
+    }
+    bmAnimFrameId = requestAnimationFrame(tick);
+  }
+
+  // ── Year switching ──
+  function bmSwitchYear(year) {
+    if (year === bmCurrentYear && !bmAnimRunning) return;
+    bmCurrentYear = year;
+    document.querySelectorAll('.year-tab').forEach(function(tab) {
+      tab.classList.toggle('active', tab.dataset.year === year);
+    });
+    document.getElementById('benchmarkSubtitle').textContent = benchmarkData[year].subtitle;
+    bmResetAnim();
+    var newDs = bmBuildDatasets(year);
+    for (var j = 1; j < newDs.length; j++) {
+      newDs[j]._targetBorderColor = newDs[j].borderColor;
+      newDs[j]._targetPointBg = newDs[j].pointBackgroundColor;
+      newDs[j].borderColor = 'transparent';
+      newDs[j].pointBackgroundColor = 'transparent';
+      newDs[j].pointBorderColor = 'transparent';
+    }
+    bmChart.data.datasets = newDs;
+    bmChart.update('none');
+    bmBuildYtdBar(year);
+    document.getElementById('benchmarkChartNote').textContent = '';
+    document.getElementById('benchmarkChartNote').classList.remove('visible');
+    setTimeout(bmRunAnimation, 300);
+  }
+
+  document.querySelectorAll('.year-tab').forEach(function(tab) {
+    tab.addEventListener('click', function() { bmSwitchYear(tab.dataset.year); });
+  });
+
+  // ── Trigger on scroll (plays once, re-plays on tab switch) ──
+  var bmChartEl = document.getElementById('cumulativeChart');
+  if (bmChartEl) {
+    var bmObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting && !bmHasPlayed) {
+          bmHasPlayed = true;
+          setTimeout(bmRunAnimation, 400);
+        }
+      });
+    }, { threshold: 0.2 });
+    bmObserver.observe(bmChartEl);
+  }
+})();
 </script>
 
 </body>
